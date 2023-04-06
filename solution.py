@@ -14,11 +14,9 @@ def solution(p: float, x: np.array) -> tuple:
     #loc = x.mean()
     #scale = np.sqrt(np.var(x)) / np.sqrt(len(x))
     #return loc - scale * norm.ppf(1 - alpha / 2), \
-    #       loc - scale * norm.ppf(alpha / 2)
-    import scipy.stats as st
-    lst = list(x)
-    force = []
-    for i in range(0,len(lst)):
-      temp = lst[i]/((i+1)*(i+1))
-      force.append(temp)
-    return st.t.interval(alpha=1-p,df=len(lst)-1,loc=np.mean(force),scale=st.sem(force))
+    #       loc - scale * norm.ppf(alpha / 2)    
+    alpha = 1 - p
+    n = len(x)
+    left = (-min(-x) - 1 / 2) / (14**2 / 2)
+    right = (-np.log(alpha) / n -min(-x) - 1 / 2) / (14**2 / 2)
+    return left, right
