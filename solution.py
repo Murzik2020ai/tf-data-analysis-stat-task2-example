@@ -15,8 +15,22 @@ def solution(p: float, x: np.array) -> tuple:
     #scale = np.sqrt(np.var(x)) / np.sqrt(len(x))
     #return loc - scale * norm.ppf(1 - alpha / 2), \
     #       loc - scale * norm.ppf(alpha / 2)    
-    alpha = 1 - p
-    n = len(x)
-    left = (-min(-x) - 1 / 2) / (14**2 / 2)
-    right = (-np.log(alpha) / n -min(-x) - 1 / 2) / (14**2 / 2)
-    return left, right
+    #alpha = 1 - p
+    #n = len(x)
+    #left = (-min(-x) - 1 / 2) / (14**2 / 2)
+    #right = (-np.log(alpha) / n -min(-x) - 1 / 2) / (14**2 / 2)
+    #return left, right
+    alfa = 1 - p
+    # create dataframe for convinience
+    df= pd.DataFrame({'x':x})
+    # вычисляем среднее
+    loc = df['x'].mean()
+    # вычисляем дисперсию
+    std = df['x'].std()
+    # получаем шкалу
+    scale = np.sqrt(std)/np.sqrt(len(x))
+    # получаем левую оценку
+    left = loc - scale * norm.ppf(1 - alfa/2)
+    # получаем правую оценку
+    right = loc - scale * norm.ppf(alfa/2)
+    return 2*left/(14*14), 2*right/(14*14)  #переходим от оценки ошибки расстояния, к оценке ошибки ускорения
