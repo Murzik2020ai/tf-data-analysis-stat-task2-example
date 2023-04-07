@@ -6,31 +6,17 @@ from scipy.stats import norm
 
 chat_id = 1226526788 # Ваш chat ID, не меняйте название переменной
 
-def solution(p: float, x: np.array) -> tuple:
-    # Измените код этой функции
-    # Это будет вашим решением
-    # Не меняйте название функции и её аргументы
-    #alpha = 1 - p
-    #loc = x.mean()
-    #scale = np.sqrt(np.var(x)) / np.sqrt(len(x))
-    #return loc - scale * norm.ppf(1 - alpha / 2), \
-    #       loc - scale * norm.ppf(alpha / 2)    
+def solution(p: float, x: np.array) -> tuple:   
     #alpha = 1 - p
     #n = len(x)
     #left = (-min(-x) - 1 / 2) / (14**2 / 2)
     #right = (-np.log(alpha) / n -min(-x) - 1 / 2) / (14**2 / 2)
     #return left, right
+    import scipy.stats as st
     alfa = 1 - p
-    # create dataframe for convinience
-    df= pd.DataFrame({'x':x})
-    # вычисляем среднее
-    loc = df['x'].mean()
-    # вычисляем дисперсию
-    std = df['x'].std()
-    # получаем шкалу
-    scale = np.sqrt(std)/np.sqrt(len(x))
-    # получаем левую оценку
-    left = loc - scale * norm.ppf(1 - alfa/2)
-    # получаем правую оценку
-    right = loc - scale * norm.ppf(alfa/2)
-    return 2*left/(14*14), 2*right/(14*14)  #переходим от оценки ошибки расстояния, к оценке ошибки ускорения
+    lst = list(x)
+    force = []
+    for i in range(0,len(lst)):
+      temp = 2*lst[i]/(14*14)
+      force.append(temp)
+    return st.t.interval(alpha=alfa,df=len(force)-1,loc=np.mean(force),scale=st.sem(force))
